@@ -1,0 +1,31 @@
+<h>nice</h>
+<div id="article-content">
+  <!-- The article details will appear here -->
+</div>
+
+<button id="read-more-btn">Read More</button>
+
+<script>
+  // Get the article number from the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const articleId = urlParams.get('id');
+
+  // Fetch the specific article details from your backend
+  fetch(`http://localhost:3000/articles/${articleId}`)
+    .then(response => response.json())
+    .then(article => {
+      const articleContent = document.getElementById('article-content');
+      articleContent.innerHTML = `
+        <h1>Article ${article.article_no}</h1>
+        <p>${article.statement}</p>
+        <p id="explanation">${article.explanation}</p>
+        <p id="read-more" style="display: none;">${article.read_more}</p>
+      `;
+
+      // Add functionality to the 'Read More' button
+      document.getElementById('read-more-btn').addEventListener('click', () => {
+        document.getElementById('read-more').style.display = 'block';
+      });
+    })
+    .catch(error => console.error('Error fetching article:', error));
+</script>

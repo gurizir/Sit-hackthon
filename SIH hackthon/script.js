@@ -2,6 +2,16 @@ const scroll = new LocomotiveScroll({
   el: document.querySelector('#main'),
   smooth: true
 });
+const articleId = urlParams.get('id');
+console.log('Article ID:', articleId); // Check if the correct ID is being passed
+fetch(`http://localhost:3000/articles/${articleId}`)
+  .then(response => response.json())
+  .then(article => {
+    console.log('Fetched article:', article); // Check if the data is received
+    // ...rest of your code
+  })
+  .catch(error => console.error('Error fetching article:', error));
+
 
 function pageLoadAnimation() {
   gsap.from(".nav-links li", {

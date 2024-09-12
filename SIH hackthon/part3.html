@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Article Details</title>
+</head>
+<body>
+  <div id="article-content">
+    <!-- The article details will appear here -->
+  </div>
+
+  <button id="read-more-btn">Read More</button>
+
+  <script>
+    // Get the article number from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    if (articleId) {
+      // Fetch the specific article details from your backend
+      fetch(`http://localhost:3000/articles/${articleId}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(article => {
+          console.log(article);  // Log the fetched article data
+
+          const articleContent = document.getElementById('article-content');
+          articleContent.innerHTML = `
+            <h1>Article ${article.article_no}</h1>
+            <p>${article.statement}</p>
+            <p id="explanation">${article.explanation}</p>
+            <p id="read-more" style="display: none;">${article.read_more}</p>
+          `;
+
+          // Add functionality to the 'Read More' button
+          document.getElementById('read-more-btn').addEventListener('click', () => {
+            document.getElementById('read-more').style.display = 'block';
+          });
+        })
+        .catch(error => console.error('Error fetching article:', error));
+    } else {
+      console.error('No article ID provided in the URL');
+    }
+  </script>
+</body>
+</html>
